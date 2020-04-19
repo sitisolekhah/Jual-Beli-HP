@@ -1,0 +1,2 @@
+rootProject.name='SitiSolekhahDatabaseAPIProject'
+include ':app'
