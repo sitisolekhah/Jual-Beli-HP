@@ -99,7 +99,7 @@ alert.show();
                 @Override
                 public  void  onPostExecute(String result) {
                     Log.d("TAG", "Delete :"+result);
-                    if (result.equals("timeout")) || result.trim().equalsIgnoreCase("Tidak dapat terkoneksi ke Data Base")){
+                    if (result.equals("timeout") || result.trim().equalsIgnoreCase("Tidak dapat terkoneksi ke Data Base")){
     Toast.makeText((getBaseContext(), "Tidak dapat Terkoneksi Dengan Serve", Toast.LENGTH_SHORT).show();
                     }else{
     goToMainActivity();
