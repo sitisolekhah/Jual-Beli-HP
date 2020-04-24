@@ -95,7 +95,8 @@ alert.show();
         try {
             ArrayList<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>(1);
             nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(handphone.getId())));
-            AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs, new AsyncInvokeURLTask.OnPostExecuteListener() {
+            AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs,
+                    new AsyncInvokeURLTask.OnPostExecuteListener() {
                 @Override
                 public  void  onPostExecute(String result) {
                     Log.d("TAG", "Delete :"+result);
