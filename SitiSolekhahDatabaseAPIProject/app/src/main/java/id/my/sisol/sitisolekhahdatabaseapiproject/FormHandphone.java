@@ -1,12 +1,14 @@
 package id.my.sisol.sitisolekhahdatabaseapiproject;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import id.my.sisol.sitisolekhahdatabaseapiproject.model.Handphone;
 import id.my.sisol.sitisolekhahdatabaseapiproject.server.AsyncInvokeURLTask;
 
-public class FormHandphone extends ActionBarActivty {
+public class FormHandphone extends AppCompatActivity {
     private EditText textNama, textHarga;
     private Handphone handphone;
     public static final String urlSubmit = "submit_phone.php";
@@ -79,10 +81,11 @@ public class FormHandphone extends ActionBarActivty {
                 nameValuePairs.add(new BasicNameValuePair("nama", nama));
                 nameValuePairs.add(new BasicNameValuePair("harga", harga));
                 nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(handphone.getId())));
-                AsyncInvokeURLTask task= new AsyncInvokeURLTask(nameValuePairs, new AsyncInvokeURLTask.OnPostExecuteListener() {
+                AsyncInvokeURLTask task= new AsyncInvokeURLTask(nameValuePairs,
+                        new AsyncInvokeURLTask.OnPostExecuteListener() {
                     @Override
-                    public void OnPostExecute(String Result) {
-                        log.d("TAG", "savedata:" + result);
+                    public void OnPostExecute(String result) {
+                        Log.d ("TAG", "savedata:" + result);
                         if (result.equals("timeout") || result.trim().equalsIgnoreCase
                                 ("Tidak dapat terkoneksi ke Data Base")) {
                         } else {
@@ -95,9 +98,9 @@ public class FormHandphone extends ActionBarActivty {
                 task.applicationContext=FormHandphone.this;
                 task.mNoteItWebUrl=urlSubmit;
                 task.execute();
-            }catch (Exception e ) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace ();
         }
     }
 }

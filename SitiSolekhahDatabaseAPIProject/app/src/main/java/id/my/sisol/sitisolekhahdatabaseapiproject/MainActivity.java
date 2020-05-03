@@ -1,10 +1,5 @@
 package id.my.sisol.sitisolekhahdatabaseapiproject;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,59 +17,60 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
+
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import id.my.sisol.sitisolekhahdatabaseapiproject.adapter.ListAdapterHandphone;
 import id.my.sisol.sitisolekhahdatabaseapiproject.model.Handphone;
 import id.my.sisol.sitisolekhahdatabaseapiproject.server.AsyncInvokeURLTask;
 
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends AppCompatActivity implements
                 SearchView.OnQueryTextListener {
             private static final String TAG = "MainActivity";
             private ListView listView;
             private ActionMode actionMode;
             private ActionMode.Callback amCallback;
-            private List<Handphone>listhp;
+            private List<Handphone> listhp;
             private ListAdapterHandphone adapter;
             private  Handphone selectedList;
             @Override
             protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_main);
-                listView = (ListView) findViewById(R.id.listview_main);
-                amCallback = new ActionMode.Callback() {
+                super.onCreate ( savedInstanceState );
+                setContentView ( R.layout.activity_main );
+                listView=(ListView) findViewById (R.id.listview_main);
+                amCallback = new ActionMode.Callback (){
                     @Override
-                    public boolean onPrepareActionMode(ActionMode mode, Menu) {
-                        return false;
-                    }
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {return false; }
 
                     @Override
-                    public void onDestroyActionMode(ActionMode) {
-                        actionMode = null;
-                    }
+                    public void onDestroyActionMode(ActionMode mode) { actionMode = null;}
 
                     @Override
-                    public boolean onCreateActionMode(ActionMode, Menu menu) {
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                         getMenuInflater().inflate(R.menu.activity_main_action, menu);
                         return true;
                     }
 
                     @Override
                     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                        switch (item.getItemId()) {
+                        switch (item.getItemId ()) {
                             case R.id.action_menu_edit:
-                                showUpdateForm();
+                                showUpdateForm ();
                                 break;
                             case R.id.action_menu_delete:
-                                delete();
+                                delete ();
                                 break;
                         }
-                        mode.finish();
+                        mode.finish ();
                         return false;
                     }
                 };
@@ -82,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements
                 loadDataHP();
             }
             private void showUpdateForm(){
-                Intent in = new Intent((getApplicationContext(), FormHandphone.class);
+                Intent in = new Intent ( getApplicationContext (), FormHandphone.class );
                 in.putExtra("id", selectedList.getId().toString());
                 in.putExtra("nama", selectedList.getNama());
                 in.putExtra("harga", selectedList.getHarga());
@@ -125,15 +121,15 @@ public class MainActivity extends ActionBarActivity implements
                 textView.setTextColor(Color.WHITE);
                 searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
                 searchView.setIconifiedByDefault(false);
-                searchView.setOnQueryTextFocusChangeListener(this);
+                searchView.setOnQueryTextListener(this);
                 searchView.setQueryHint("nama");
                 return true;
             }
             @Override
-        public boolean onOptionItemSelected(MenuItem item) {
+        public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()){
                 case R.id.option_menu_new :
-            Intent intent = new Intent(getApplicationContext(),
+            Intent in = new Intent(getApplicationContext(),
                     FormHandphone.class);
             startActivity(in);
             break;
@@ -161,11 +157,23 @@ public class MainActivity extends ActionBarActivity implements
             private  void populateListView() {
                 adapter = new ListAdapterHandphone(getApplicationContext(), this.listhp);
                 listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View v, int pos, long id) {
+                listView.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener () {
+                                                    @Override
+                                                    public boolean onItemLongClick(AdapterView<?> adapterView, View v, int pos, long id) {
+                                                        if (actionMode != null){
+                                                            return false;
+                                                        }
+                                                        actionMode = startActionMode ( amCallback );
+                                                        v.setSelected ( true );
+                                                        selectedList = ( Handphone ) adapter.getItem ( pos );
+                                                        return true;
+                                                    }
+                                                });
+                listView.setOnItemClickListener (new  AdapterView.OnItemClickListener ()  {
+                @Override
+                public  void  onItemClick(AdapterView<?> adapterView, View v, int pos, long id){
                         selectedList=(Handphone) adapter.getItem(pos);
-                        Intent in = new Intent(getApplicationContext()), DetailHandphone.class);
+                        Intent in = new Intent(getApplicationContext(), DetailHandphone.class);
                         in.putExtra("id", selectedList.getId().toString());
                         in.putExtra("nama", selectedList.getNama());
                         in.putExtra("harga", selectedList.getHarga());
@@ -175,11 +183,12 @@ public class MainActivity extends ActionBarActivity implements
             }
             public void loadDataHP() {
                 try {
-                    ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(0);
+                    ArrayList<NameValuePair> nameValuePairs = new
+                            ArrayList<NameValuePair>(0);
                     AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs,
                             new AsyncInvokeURLTask.OnPostExecuteListener() {
                                 @Override
-                                public void onPostExecute(String result) {
+                                public void OnPostExecute(String result) {
                                     Log.d("TAG", "Login:" + result);
                                     if (result.equals("timeout") ||
                                             result.trim().equalsIgnoreCase("Tidak dapat Terkoneksi ke Data Base")) {
@@ -199,39 +208,38 @@ public class MainActivity extends ActionBarActivity implements
                     e.printStackTrace();
                 }
             }
-            public void deleteData(){
-            try {
-                ArrayList<NameValuePair>nameValuePairs = new ArrayList<NameValuePair>(0);
-                AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs,
-                        new AsyncInvokeURLTask.OnPostExecuteListener() {
-                    @Override
-                    public void OnPostExecute(String Result) {
-                        Log.d("TAG", "Login:"+ result);
-                        if (result.equals("timeout") ||
-                                result.trim().equalsIgnoreCase("Tidak Dapat teroneksi ke Data Base")){
-                            Toast.makeText(getBaseContext(), "Tidak Dapat Terkoneksi dengn Server",
-                                    Toast.LENGTH_SHORT).show();
-                        }else {
-                            processResponse(result);
-                            populateListView();
-                        }
-                    }
-                });
-                task.showdialog = true;
-                task.message = "Load Data HP Harap Tunggu..";
-                task.applicationContext = MainActivity.this;
-                task.mNoteItWebUrl = "/select_all.php";
-                task.execute();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            @Override
-                public boolean onQueryTextChange(String newText) {
-                    adapter.getFilter().filter(newText);
-                    return true;
-            }
-            @Override
-                public boolean onQueryTextSubmit(String query){
-                    return false;
+            public void deleteData() {
+                try {
+                    ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair> ( 0 );
+                    AsyncInvokeURLTask task = new AsyncInvokeURLTask ( nameValuePairs,
+                            new AsyncInvokeURLTask.OnPostExecuteListener () {
+                                @Override
+                                public void OnPostExecute(String result) {
+                                    Log.d ( "TAG", "Login:" + result );
+                                    if (result.equals ( "timeout" ) ||
+                                            result.trim ().equalsIgnoreCase ( "Tidak Dapat teroneksi ke Data Base" )) {
+                                        Toast.makeText ( getBaseContext (), "Tidak Dapat Terkoneksi dengn Server",
+                                                Toast.LENGTH_SHORT ).show ();
+                                    } else {
+                                        processResponse ( result );
+                                        populateListView ();
+                                    }
+                                }
+                            } );
+                    task.showdialog = true;
+                    task.message = "Load Data HP Harap Tunggu..";
+                    task.applicationContext = MainActivity.this;
+                    task.mNoteItWebUrl = "/select_all.php";
+                    task.execute ();
+                } catch (Exception e) {
+                    e.printStackTrace ();
                 }
+            }
+            @Override
+public boolean onQueryTextChange(String newText){
+            adapter.getFilter ().filter ( newText );
+            return true;
+            }
+            @Override
+    public boolean onQueryTextSubmit(String query) {return false;}
 }

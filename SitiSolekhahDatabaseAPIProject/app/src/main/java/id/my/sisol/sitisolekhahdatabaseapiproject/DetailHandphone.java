@@ -24,6 +24,7 @@ public class DetailHandphone extends AppCompatActivity {
     public static final String urlDelete = "delete_phone.php";
     private EditText textNama, textHarga;
     private Handphone handphone;
+
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -33,8 +34,8 @@ public class DetailHandphone extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
     private void initView(){
-        textNama = (EditText) findViewById(R.id.add_new_nama);
-        textHarga=(EditText) findViewById(R.id.add_new_harga);
+        textNama = (EditText) findViewById (R.id.add_new_nama);
+        textHarga = (EditText) findViewById(R.id.add_new_harga);
         String id = getIntent().getStringExtra("id");
         String nama = getIntent().getStringExtra("nama");
         String harga = getIntent().getStringExtra("harga");
@@ -50,7 +51,7 @@ public class DetailHandphone extends AppCompatActivity {
         return true;
     }
     @Override
-    public boolean onOptionItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 goToMainActivity();
@@ -83,7 +84,7 @@ public class DetailHandphone extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "delete", Toast.LENGTH_SHORT).show();
             }
         });
-builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
     public void onClick(DialogInterface dialog, int which) { dialog.cancel();
     }
 });
@@ -97,15 +98,15 @@ alert.show();
             nameValuePairs.add(new BasicNameValuePair("id", String.valueOf(handphone.getId())));
             AsyncInvokeURLTask task = new AsyncInvokeURLTask(nameValuePairs,
                     new AsyncInvokeURLTask.OnPostExecuteListener() {
-                @Override
-                public  void  onPostExecute(String result) {
-                    Log.d("TAG", "Delete :"+result);
-                    if (result.equals("timeout") || result.trim().equalsIgnoreCase("Tidak dapat terkoneksi ke Data Base")){
-    Toast.makeText((getBaseContext(), "Tidak dapat Terkoneksi Dengan Serve", Toast.LENGTH_SHORT).show();
-                    }else{
-    goToMainActivity();
-                    }
-                }
+                        @Override
+                        public void OnPostExecute(String result) {
+                            Log.d("TAG", "Delete :"+ result);
+                            if (result.equals("timeout") || result.trim().equalsIgnoreCase("Tidak dapat terkoneksi ke Data Base")){
+                                Toast.makeText ( getBaseContext (), "Tidak dapat Terkoneksi Dengan Serve", Toast.LENGTH_SHORT).show();
+                            }else {
+                                goToMainActivity();
+                            }
+                       }
             });
     task.showdialog=true;
             task.message="Proses Delete Data Harap Tunggu...";
