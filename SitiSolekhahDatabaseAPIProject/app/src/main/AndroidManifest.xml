@@ -10,20 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity">
-
+            android:name=".MainActivity"
+            android:label="JualBeliHP">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="id.my.sisol.sitisolekhahdatabaseapiproject.FormHandphone"
+            android:name=".FormHandphone"
             android:label="@string/title_activity_add_new">
         </activity>
         <activity
-            android:name="id.my.sisol.sitisolekhahdatabaseapiproject.DetailHandphone"
+            android:name=".DetailHandphone"
             android:label="@string/title_activity_detail_handphone">
         </activity>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
